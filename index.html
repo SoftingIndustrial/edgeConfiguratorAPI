@@ -18,38 +18,41 @@ window.onload = function () {
     SwaggerUIBundle({
         urls: [
             {
-                url: "edgeConfiguratorSiemens.json",
+                url: "./edgeConfiguratorSiemens.json",
                 name: "SiemensAPI"
             },
             {
-                url: "edgeConfiguratorModbus.json",
+                url: "./edgeConfiguratorModbus.json",
                 name: "ModbusAPI"
             },
             {
-                url: "edgeConfiguratorAllenBradley.json",
+                url: "./edgeConfiguratorAllenBradley.json",
                 name: "AllenBradleyAPI"
             },
             {
-                url: "edgeConfigurator840D.json",
+                url: "./edgeConfigurator840D.json",
                 name: "840DAPI"
             },
             {
-                url: "edgeConfiguratorFanuc.json",
+                url: "./edgeConfiguratorFanuc.json",
                 name: "FanucAPI"
             },
             {
-                url: "edgeConfiguratoredgeAggregator.json",
+                url: "./edgeConfiguratoredgeAggregator.json",
                 name: "edgeAggregatorAPI"
             }
         ],
-
         dom_id: '#swagger-ui',
-
         deepLinking: true,
-
+        queryConfigEnabled: true,
         presets: [
-            SwaggerUIBundle.presets.apis
-        ]
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
     })
 }
 </script>
