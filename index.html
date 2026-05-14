@@ -4,7 +4,6 @@
     <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
     <!-- ADD THIS SCRIPT: It contains the StandaloneLayout -->
     <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
-
     <link rel="stylesheet"
           type="text/css"
           href="https://unpkg.com/swagger-ui-dist/swagger-ui.css"/>
@@ -14,7 +13,6 @@
 
 <body>
 <div id="swagger-ui"></div>
-
 <script>
 window.onload = function () {
     SwaggerUIBundle({
@@ -30,13 +28,13 @@ window.onload = function () {
         deepLinking: true,
         presets: [
             SwaggerUIBundle.presets.apis,
-            SwaggerUIStandalonePreset // Use the preset from the new script
+            SwaggerUIStandalonePreset
         ],
         plugins: [
             SwaggerUIBundle.plugins.DownloadUrl
         ],
-        layout: "StandaloneLayout", // Now this will be recognized
-        queryConfigEnabled: true    // This makes your README links work
+        layout: "StandaloneLayout",
+        queryConfigEnabled: true  
     })
 }
 </script>
