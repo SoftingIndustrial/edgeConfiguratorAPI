@@ -9,7 +9,7 @@ Access the Swagger UI portal here:
 | API | Documentation |
 |---|---|
 | Siemens | [Open](https://softingindustrial.github.io/edgeConfiguratorAPI/?urls.primaryName=SiemensAPI) |
-| 840D | [Open](https://softingindustrial.github.io/edgeConfiguratorAPI/?urls.primaryName=API840D) |
+| 840D | [Open](https://softingindustrial.github.io/edgeConfiguratorAPI/?urls.primaryName=Siemens840DAPI) |
 | Modbus | [Open](https://softingindustrial.github.io/edgeConfiguratorAPI/?urls.primaryName=ModbusAPI) |
 | Fanuc | [Open](https://softingindustrial.github.io/edgeConfiguratorAPI/?urls.primaryName=FanucAPI) |
 | Allen Bradley | [Open](https://softingindustrial.github.io/edgeConfiguratorAPI/?urls.primaryName=AllenBradleyAPI) |
