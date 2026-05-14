@@ -11,7 +11,32 @@
             window.onload = function () {
                 // Begin Swagger UI call region
                 const ui = SwaggerUIBundle({
-                    url: "edgeConfiguratorSiemens.json", //Location of Open API spec in the repo
+                    urls: [
+                        {
+                            url: "edgeConfiguratorSiemens.json",
+                            name: "Siemens API"
+                        },
+                        {
+                            url: "edgeConfiguratorModbus.json",
+                            name: "Modbus API"
+                        },
+                        {
+                            url: "edgeConfiguratorAllenBradley.json",
+                            name: "Allen Bradley API"
+                        },
+						{
+                            url: "edgeConfigurator840D.json",
+                            name: "840D API"
+                        },
+						{
+                            url: "edgeConfiguratorFanuc.json",
+                            name: "Fanuc API"
+                        },
+						{
+                            url: "edgeConfiguratoredgeAggregator.json",
+                            name: "edgeAggregator API"
+                        },
+                    ], //Location of Open API spec in the repo
                     dom_id: '#swagger-ui',
                     deepLinking: true,
                     presets: [
@@ -21,6 +46,7 @@
                     plugins: [
                         SwaggerUIBundle.plugins.DownloadUrl
                     ],
+					layout: "StandaloneLayout"
                 })
                 window.ui = ui
             }

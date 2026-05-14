@@ -1,8 +1,18 @@
-# edge-configurator-siemens-manual
+# edge-configurator-manual
 
-edge-configurator-siemens documentation repository. Shall be mirrored to a public Github repository.
+NOTE: This documentation is deprecated.
 
-Ensure that any credentials or sensitive information shall be omitted.
+# Swagger API Documentation
 
-# render API
-The Swagger API documentation can be found [here](https://softingindustrial.github.io/edgeConfiguratorAPI-Siemens/)
+Access the Swagger UI portal here:
+
+https://softingindustrial.github.io/edgeConfiguratorAPI/
+
+Use the API dropdown in the top bar to switch between:
+
+- Siemens
+- 840D
+- Modbus
+- Fanuc
+- Allen Bradley
+- edgeAggregator

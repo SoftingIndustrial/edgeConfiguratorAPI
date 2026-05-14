@@ -1,14 +1,14 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "edgeConfiguratorSiemens API",
+        "title": "edgeConfiguratorAllenBradley API",
         "description": "The edgeConfigurator allows remote configuration of the edgeConnector product family.",
         "version": "2.0"
     },
     "servers": [
         {
             "url": "{protocol}://{environment}:{port}",
-            "description": "edgeConfiguratorSiemens",
+            "description": "edgeConfiguratorAllenBradley",
             "variables": {
                 "protocol": {
                     "default": "http",
@@ -13629,19 +13629,19 @@
                 }
             }
         },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection": {
+        "/connectors/{edgeConnector_ID}/runtime/allenbradley/connections": {
             "get": {
                 "tags": [
-                    "Siemens_S7_32"
+                    "Allen_Bradley"
                 ],
-                "summary": "Retrieve all configured Siemens Siemens S7-32 connections.",
+                "summary": "Retrieve all configured Allen-Bradley connections.",
                 "responses": {
                     "200": {
                         "description": "OK success.",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/siemensS732Conns"
+                                    "$ref": "#/components/schemas/allenbradleyConns"
                                 }
                             }
                         }
@@ -13690,15 +13690,15 @@
             },
             "put": {
                 "tags": [
-                    "Siemens_S7_32"
+                    "Allen_Bradley"
                 ],
-                "summary": "Creates a new Siemens Siemens S7-32 connection",
-                "description": "Creates a new Siemens Siemens S7-32 connection and persists the information in the configuration file. If enabled it applies it immediately after a succeess confirmation. Each newly created connection to a data source has to be added into an existing address space.",
+                "summary": "Creates a new Allen_Bradley connection",
+                "description": "Creates a new Allen_Bradley connection and applies it immediately after a success confirmation. Each newly created connection to a data source has to be added into an existing address space.",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/siemensS732Conn"
+                                "$ref": "#/components/schemas/allenbradleyConn"
                             }
                         }
                     }
@@ -13767,12 +13767,12 @@
                 ]
             }
         },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection/{conn_name}": {
+        "/connectors/{edgeConnector_ID}/runtime/allenbradley/connection/{conn_name}": {
             "get": {
                 "tags": [
-                    "Siemens_S7_32"
+                    "Allen_Bradley"
                 ],
-                "summary": "Retrieve configured Siemens Siemens S7-32 connection identified by <conn_name>.",
+                "summary": "Retrieve the Allen_Bradley connection identified by name <conn_name> .",
                 "parameters": [
                     {
                         "name": "conn_name",
@@ -13797,17 +13797,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/siemensS732ConnWithoutConnStatus"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
+                                    "$ref": "#/components/schemas/allenbradleyConn"
                                 }
                             }
                         }
@@ -13846,10 +13836,9 @@
             },
             "post": {
                 "tags": [
-                    "Siemens_S7_32"
+                    "Allen_Bradley"
                 ],
-                "summary": "Updates an existing Siemens Siemens S7-32 connection",
-                "description": "Updates an existing Siemens Siemens S7-32 connection with the new information. If changes are detected and if enabled it applies it immediately after a succeess confirmation.",
+                "summary": "Updates an existing Allen_Bradley connection with the new information and applies it immediately after a success confirmation.",
                 "parameters": [
                     {
                         "name": "conn_name",
@@ -13872,502 +13861,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/siemensS732Conn"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Siemens_S7_32"
-                ],
-                "summary": "Deletes the Siemens S7-32 connection identified by name <conn_name> .",
-                "parameters": [
-                    {
-                        "name": "conn_name",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection/{conn_name}/symbolfile": {
-            "put": {
-                "tags": [
-                    "Siemens_S7_32"
-                ],
-                "summary": "Upload an SDFI symbol file for the connection identified by name <conn_name>.",
-                "parameters": [
-                    {
-                        "name": "conn_name",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection/advanced/defaults": {
-            "get": {
-                "tags": [
-                    "Siemens_S7_32"
-                ],
-                "summary": "Retrieves default advanced settings values.",
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/siemensS732ConnWithoutConnStatus"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            }
-        },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection": {
-            "get": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Retrieve all configured Siemens S7-72 connections.",
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/siemensS772Conns"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Creates a new Siemens S7-72 connection",
-                "description": "Creates a new Siemens S7-72 connection and applies it immediately after a success confirmation. Each newly created connection to a data source has to be added into an existing address space.",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/siemensS772Conn"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            }
-        },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection/{conn_name}": {
-            "get": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Retrieve the Siemens S7-72 connection identified by name <conn_name> .",
-                "parameters": [
-                    {
-                        "name": "conn_name",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/siemensS772ConnWithoutConnStatus"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Updates an existing Siemens S7-72 connection with the new information and applies it immediately after a success confirmation.",
-                "parameters": [
-                    {
-                        "name": "conn_name",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/siemensS772Conn"
+                                "$ref": "#/components/schemas/allenbradleyConn"
                             }
                         }
                     }
@@ -14427,9 +13921,9 @@
             },
             "delete": {
                 "tags": [
-                    "Siemens_S7_72"
+                    "Allen_Bradley"
                 ],
-                "summary": "Deletes the Siemens S7-72 connection identified by name <conn_name> .",
+                "summary": "Deletes the Allen_Bradley connection identified by name <conn_name> .",
                 "parameters": [
                     {
                         "name": "conn_name",
@@ -14492,10 +13986,10 @@
                 }
             }
         },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection/advanced/defaults": {
+        "/connectors/{edgeConnector_ID}/runtime/allenbradley/connection/advanced/defaults": {
             "get": {
                 "tags": [
-                    "Siemens_S7_72"
+                    "Allen_Bradley"
                 ],
                 "summary": "Retrieves default advanced settings values.",
                 "responses": {
@@ -14504,7 +13998,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/siemensS772ConnWithoutConnStatus"
+                                    "$ref": "#/components/schemas/allenbradleyConn"
                                 }
                             }
                         }
@@ -19422,269 +18916,71 @@
                     }
                 ]
             },
-            "siemensS772ConnWithoutConnStatus": {
-                "type": "object",
-                "required": [
-                    "Address",
-                    "ConfigurationCheckPeriod",
-                    "ConnectionTimeout",
-                    "Enabled",
-                    "FolderLongNames",
-                    "MaxExecutingServices",
-                    "Name",
-                    "Port",
-                    "ReconnectRetryCounter",
-                    "ReconnectRetryPeriod",
-                    "RequestTimeout",
-                    "ServiceTimeout"
-                ],
-                "properties": {
-                    "Address": {
-                        "type": "string"
-                    },
-                    "ConfigurationCheckPeriod": {
-                        "type": "integer"
-                    },
-                    "ConnectionTimeout": {
-                        "type": "integer"
-                    },
-                    "Enabled": {
-                        "type": "boolean"
-                    },
-                    "FolderLongNames": {
-                        "type": "boolean"
-                    },
-                    "MaxExecutingServices": {
-                        "type": "integer"
-                    },
-                    "Name": {
-                        "type": "string"
-                    },
-                    "Port": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryCounter": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryPeriod": {
-                        "type": "integer"
-                    },
-                    "RequestTimeout": {
-                        "type": "integer"
-                    },
-                    "ServiceTimeout": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "siemensS772Conn": {
-                "type": "object",
-                "required": [
-                    "Address",
-                    "ConfigurationCheckPeriod",
-                    "ConnectionStatus",
-                    "ConnectionTimeout",
-                    "Enabled",
-                    "FolderLongNames",
-                    "MaxExecutingServices",
-                    "Name",
-                    "Port",
-                    "ReconnectRetryCounter",
-                    "ReconnectRetryPeriod",
-                    "RequestTimeout",
-                    "ServiceTimeout"
-                ],
-                "properties": {
-                    "Address": {
-                        "type": "string"
-                    },
-                    "ConfigurationCheckPeriod": {
-                        "type": "integer"
-                    },
-                    "ConnectionStatus": {
-                        "type": "boolean"
-                    },
-                    "ConnectionTimeout": {
-                        "type": "integer"
-                    },
-                    "Enabled": {
-                        "type": "boolean"
-                    },
-                    "FolderLongNames": {
-                        "type": "boolean"
-                    },
-                    "MaxExecutingServices": {
-                        "type": "integer"
-                    },
-                    "Name": {
-                        "type": "string"
-                    },
-                    "Port": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryCounter": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryPeriod": {
-                        "type": "integer"
-                    },
-                    "RequestTimeout": {
-                        "type": "integer"
-                    },
-                    "ServiceTimeout": {
-                        "type": "integer"
-                    },
-                    "Simulation": {
-                        "type": "boolean"
-                    }
-                }
-            },
-            "siemensS772Conns": {
-                "type": "array",
-                "items": {
-                    "allOf": [
-                        {
-                            "$ref": "#/components/schemas/siemensS772Conn"
-                        }
-                    ]
-                }
-            },
-            "siemensS732ConnWithoutConnStatus": {
+            "allenbradleyConn": {
                 "type": "object",
                 "required": [
                     "Name",
                     "Address",
                     "Enabled",
-                    "ExpandArrays",
                     "Port",
-                    "ConnectionTimeout",
-                    "ReconnectRetryCounter",
-                    "ReconnectRetryPeriod",
                     "RequestTimeout",
-                    "MaxExecutingServices",
+                    "ConnectionTimeout",
+                    "ReconnectRetryPeriod",
+                    "ReconnectRetryCounter",
                     "ServiceTimeout",
-                    "TSAPPLC",
-                    "AMQPLC",
-                    "SDFIFileName"
+                    "ExpandArrays",
+                    "OptimizeRead",
+                    "OptimizeWrite",
+                    "SymbolicAddressing"
                 ],
                 "properties": {
-                    "Name": {
-                        "type": "string"
-                    },
                     "Address": {
                         "type": "string"
                     },
+                    "ConnectionTimeout": {
+                        "type": "integer"
+                    },
                     "Enabled": {
                         "type": "boolean"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Port": {
+                        "type": "integer"
+                    },
+                    "ReconnectRetryCounter": {
+                        "type": "integer"
+                    },
+                    "ReconnectRetryPeriod": {
+                        "type": "integer"
+                    },
+                    "RequestTimeout": {
+                        "type": "integer"
+                    },
+                    "ServiceTimeout": {
+                        "type": "integer"
                     },
                     "ExpandArrays": {
                         "type": "boolean"
                     },
-                    "Port": {
-                        "type": "integer"
-                    },
-                    "ConnectionTimeout": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryCounter": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryPeriod": {
-                        "type": "integer"
-                    },
-                    "RequestTimeout": {
-                        "type": "integer"
-                    },
-                    "MaxExecutingServices": {
-                        "type": "integer"
-                    },
-                    "ServiceTimeout": {
-                        "type": "integer"
-                    },
-                    "TSAPPLC": {
-                        "type": "string"
-                    },
-                    "AMQPLC": {
-                        "type": "integer"
-                    },
-                    "SDFIFileName": {
-                        "type": "string"
-                    }
-                }
-            },
-            "siemensS732Conn": {
-                "type": "object",
-                "required": [
-                    "Name",
-                    "Address",
-                    "Enabled",
-                    "ExpandArrays",
-                    "Port",
-                    "ConnectionTimeout",
-                    "ReconnectRetryCounter",
-                    "ReconnectRetryPeriod",
-                    "RequestTimeout",
-                    "MaxExecutingServices",
-                    "ServiceTimeout",
-                    "TSAPPLC",
-                    "AMQPLC",
-                    "SDFIFileName",
-                    "ConnectionStatus"
-                ],
-                "properties": {
-                    "Name": {
-                        "type": "string"
-                    },
-                    "Address": {
-                        "type": "string"
-                    },
-                    "Enabled": {
+                    "OptimizeRead": {
                         "type": "boolean"
                     },
-                    "ExpandArrays": {
+                    "OptimizeWrite": {
                         "type": "boolean"
                     },
-                    "Port": {
-                        "type": "integer"
-                    },
-                    "ConnectionTimeout": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryCounter": {
-                        "type": "integer"
-                    },
-                    "ReconnectRetryPeriod": {
-                        "type": "integer"
-                    },
-                    "RequestTimeout": {
-                        "type": "integer"
-                    },
-                    "MaxExecutingServices": {
-                        "type": "integer"
-                    },
-                    "ServiceTimeout": {
-                        "type": "integer"
-                    },
-                    "TSAPPLC": {
-                        "type": "string"
-                    },
-                    "AMQPLC": {
-                        "type": "integer"
-                    },
-                    "SDFIFileName": {
-                        "type": "string"
-                    },
-                    "ConnectionStatus": {
+                    "SymbolicAddressing": {
                         "type": "boolean"
                     }
                 }
             },
-            "siemensS732Conns": {
+            "allenbradleyConns": {
                 "type": "array",
                 "items": {
                     "allOf": [
                         {
-                            "$ref": "#/components/schemas/siemensS732Conn"
+                            "$ref": "#/components/schemas/allenbradleyConn"
                         }
                     ]
                 }

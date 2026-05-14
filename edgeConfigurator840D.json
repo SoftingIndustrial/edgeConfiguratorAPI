@@ -1,14 +1,14 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "edgeConfiguratorSiemens API",
+        "title": "edgeConfigurator840D API",
         "description": "The edgeConfigurator allows remote configuration of the edgeConnector product family.",
         "version": "2.0"
     },
     "servers": [
         {
             "url": "{protocol}://{environment}:{port}",
-            "description": "edgeConfiguratorSiemens",
+            "description": "edgeConfigurator840D",
             "variables": {
                 "protocol": {
                     "default": "http",
@@ -13629,6 +13629,519 @@
                 }
             }
         },
+        "/connectors/{edgeConnector_ID}/runtime/siemens840d/s840dconnection": {
+            "get": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Retrieve all configured Siemens SINUMERIK 840D connections.",
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/sinumerik840dGetAllConn"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Creates a new Siemens SINUMERIK 840D connection and persists the information in the configuration file. If enabled it applies it immediately after a success confirmation. Each newly created connection to a data source has to be added into an existing address space.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/sinumerik840dConn"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/connectors/{edgeConnector_ID}/runtime/siemens840d/s840dconnection/{conn_name}": {
+            "get": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Retrieves the Siemens SINUMERIC 840D connection identified by name <conn_name> .",
+                "parameters": [
+                    {
+                        "name": "conn_name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/sinumerik840dConnWithoutConnStatus"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Updates an existing Siemens SINUMERIK 840D connection with the new information. If changes are detected and if enabled it applies it immediately after a success confirmation.",
+                "parameters": [
+                    {
+                        "name": "conn_name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/sinumerik840dConn"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/sinumerik840dConnPost"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Deletes the Siemens SINUMERIC 840D connection identified by name <conn_name> .",
+                "parameters": [
+                    {
+                        "name": "conn_name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/connectors/{edgeConnector_ID}/runtime/siemens840d/s840dconnection/{conn_name}/symbolfile": {
+            "put": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Upload an AWL symbol file for the connection identified by name <conn_name>.",
+                "parameters": [
+                    {
+                        "name": "conn_name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection/{conn_name}-PLC/symbolfile": {
+            "put": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Upload an SDFI symbol file for the connection identified by name <conn_name>.",
+                "parameters": [
+                    {
+                        "name": "conn_name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/connectors/{edgeConnector_ID}/runtime/siemens840d/s840dconnection/advanced/defaults": {
+            "get": {
+                "tags": [
+                    "Siemens_Sinumerik_840D"
+                ],
+                "description": "Retrieves default advanced settings values.",
+                "responses": {
+                    "200": {
+                        "description": "OK success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/sinumerik840dConnWithoutConnStatus"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable. Default user password was not changed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOthers"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "edgeConnector_ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
         "/connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection": {
             "get": {
                 "tags": [
@@ -14114,403 +14627,6 @@
                     },
                     "500": {
                         "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            }
-        },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection": {
-            "get": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Retrieve all configured Siemens S7-72 connections.",
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/siemensS772Conns"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Creates a new Siemens S7-72 connection",
-                "description": "Creates a new Siemens S7-72 connection and applies it immediately after a success confirmation. Each newly created connection to a data source has to be added into an existing address space.",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/siemensS772Conn"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            }
-        },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection/{conn_name}": {
-            "get": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Retrieve the Siemens S7-72 connection identified by name <conn_name> .",
-                "parameters": [
-                    {
-                        "name": "conn_name",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/siemensS772ConnWithoutConnStatus"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Updates an existing Siemens S7-72 connection with the new information and applies it immediately after a success confirmation.",
-                "parameters": [
-                    {
-                        "name": "conn_name",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/siemensS772Conn"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Deletes the Siemens S7-72 connection identified by name <conn_name> .",
-                "parameters": [
-                    {
-                        "name": "conn_name",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "edgeConnector_ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResponseOthers"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection/advanced/defaults": {
-            "get": {
-                "tags": [
-                    "Siemens_S7_72"
-                ],
-                "summary": "Retrieves default advanced settings values.",
-                "responses": {
-                    "200": {
-                        "description": "OK success.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/siemensS772ConnWithoutConnStatus"
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable. Default user password was not changed.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -19421,6 +19537,233 @@
                         }
                     }
                 ]
+            },
+            "sinumerik840dConnPost": {
+                "type": "object",
+                "required": [
+                    "NCK",
+                    "PLC"
+                ],
+                "properties": {
+                    "NCK": {
+                        "type": "object",
+                        "required": [
+                            "Message",
+                            "Restart"
+                        ],
+                        "properties": {
+                            "Message": {
+                                "type": "string"
+                            },
+                            "Restart": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "PLC": {
+                        "type": "object",
+                        "required": [
+                            "Message",
+                            "Restart"
+                        ],
+                        "properties": {
+                            "Message": {
+                                "type": "string"
+                            },
+                            "Restart": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            },
+            "sinumerik840dConnWithoutConnStatus": {
+                "type": "object",
+                "required": [
+                    "Name",
+                    "Address",
+                    "Enabled",
+                    "Port",
+                    "ConnectionTimeout",
+                    "ReconnectRetryCounter",
+                    "ReconnectRetryPeriod",
+                    "MaxExecutingServices",
+                    "RequestTimeout",
+                    "ServiceTimeout",
+                    "EnableNCK",
+                    "EnablePLC",
+                    "EnableNCUAlarm",
+                    "TSAPNCK",
+                    "TSAPPLC",
+                    "AMQPLC",
+                    "AMQNCK",
+                    "EnableNCKTooling",
+                    "AWLFileName",
+                    "SDFIFileName"
+                ],
+                "properties": {
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Address": {
+                        "type": "string"
+                    },
+                    "Enabled": {
+                        "type": "boolean"
+                    },
+                    "Port": {
+                        "type": "integer"
+                    },
+                    "ConnectionTimeout": {
+                        "type": "integer"
+                    },
+                    "ReconnectRetryCounter": {
+                        "type": "integer"
+                    },
+                    "ReconnectRetryPeriod": {
+                        "type": "integer"
+                    },
+                    "MaxExecutingServices": {
+                        "type": "integer"
+                    },
+                    "RequestTimeout": {
+                        "type": "integer"
+                    },
+                    "ServiceTimeout": {
+                        "type": "integer"
+                    },
+                    "EnableNCK": {
+                        "type": "boolean"
+                    },
+                    "EnablePLC": {
+                        "type": "boolean"
+                    },
+                    "EnableNCUAlarm": {
+                        "type": "boolean"
+                    },
+                    "TSAPNCK": {
+                        "type": "string"
+                    },
+                    "TSAPPLC": {
+                        "type": "string"
+                    },
+                    "AMQPLC": {
+                        "type": "integer"
+                    },
+                    "AMQNCK": {
+                        "type": "integer"
+                    },
+                    "EnableNCKTooling": {
+                        "type": "boolean"
+                    },
+                    "AWLFileName": {
+                        "type": "string"
+                    },
+                    "SDFIFileName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "sinumerik840dConn": {
+                "type": "object",
+                "required": [
+                    "Name",
+                    "Address",
+                    "Enabled",
+                    "Port",
+                    "ConnectionTimeout",
+                    "ReconnectRetryCounter",
+                    "ReconnectRetryPeriod",
+                    "MaxExecutingServices",
+                    "RequestTimeout",
+                    "ServiceTimeout",
+                    "EnableNCK",
+                    "EnablePLC",
+                    "EnableNCUAlarm",
+                    "TSAPNCK",
+                    "TSAPPLC",
+                    "AMQPLC",
+                    "AMQNCK",
+                    "EnableNCKTooling",
+                    "AWLFileName",
+                    "SDFIFileName",
+                    "ConnectionStatus"
+                ],
+                "properties": {
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Address": {
+                        "type": "string"
+                    },
+                    "Enabled": {
+                        "type": "boolean"
+                    },
+                    "Port": {
+                        "type": "integer"
+                    },
+                    "ConnectionTimeout": {
+                        "type": "integer"
+                    },
+                    "ReconnectRetryCounter": {
+                        "type": "integer"
+                    },
+                    "ReconnectRetryPeriod": {
+                        "type": "integer"
+                    },
+                    "MaxExecutingServices": {
+                        "type": "integer"
+                    },
+                    "RequestTimeout": {
+                        "type": "integer"
+                    },
+                    "ServiceTimeout": {
+                        "type": "integer"
+                    },
+                    "EnableNCK": {
+                        "type": "boolean"
+                    },
+                    "EnablePLC": {
+                        "type": "boolean"
+                    },
+                    "EnableNCUAlarm": {
+                        "type": "boolean"
+                    },
+                    "TSAPNCK": {
+                        "type": "string"
+                    },
+                    "TSAPPLC": {
+                        "type": "string"
+                    },
+                    "AMQPLC": {
+                        "type": "integer"
+                    },
+                    "AMQNCK": {
+                        "type": "integer"
+                    },
+                    "EnableNCKTooling": {
+                        "type": "boolean"
+                    },
+                    "AWLFileName": {
+                        "type": "string"
+                    },
+                    "SDFIFileName": {
+                        "type": "string"
+                    },
+                    "ConnectionStatus": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "sinumerik840dGetAllConn": {
+                "type": "array",
+                "items": {
+                    "allOf": [
+                        {
+                            "$ref": "#/components/schemas/sinumerik840dConn"
+                        }
+                    ]
+                }
             },
             "siemensS772ConnWithoutConnStatus": {
                 "type": "object",

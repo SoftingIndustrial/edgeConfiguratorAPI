@@ -1,13 +1,13 @@
 openapi: 3.0.0
 info:
-  title: edgeConfiguratorSiemens API
+  title: edgeConfiguratoredgeAggregator API
   description: >-
     The edgeConfigurator allows remote configuration of the edgeConnector
     product family.
   version: '2.0'
 servers:
   - url: '{protocol}://{environment}:{port}'
-    description: edgeConfiguratorSiemens
+    description: edgeConfiguratoredgeAggregator
     variables:
       protocol:
         default: http
@@ -18,15 +18,11 @@ servers:
         default: localhost
         enum:
           - localhost
-        description: >-
-          The environment depends on the host or container which runs the
-          application
       port:
         default: '3000'
         enum:
           - '3000'
           - '4000'
-        description: Use port 443 (container internal port) for https, 8099 for http
 security:
   - bearerAuth: []
 tags:
@@ -8578,152 +8574,337 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
-  /connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection:
-    get:
-      tags:
-        - Siemens_S7_32
-      summary: Retrieve all configured Siemens Siemens S7-32 connections.
-      responses:
-        '200':
-          description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/siemensS732Conns'
-        '403':
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '406':
-          description: Not Acceptable. Default user password was not changed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-      parameters:
-        - in: path
-          name: edgeConnector_ID
-          required: true
-          schema:
-            type: string
-    put:
-      tags:
-        - Siemens_S7_32
-      summary: Creates a new Siemens Siemens S7-32 connection
-      description: >-
-        Creates a new Siemens Siemens S7-32 connection and persists the
-        information in the configuration file. If enabled it applies it
-        immediately after a succeess confirmation. Each newly created connection
-        to a data source has to be added into an existing address space.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/siemensS732Conn'
-      responses:
-        '200':
-          description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '400':
-          description: Bad Request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '403':
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '406':
-          description: Not Acceptable. Default user password was not changed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-      parameters:
-        - in: path
-          name: edgeConnector_ID
-          required: true
-          schema:
-            type: string
-  /connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection/{conn_name}:
-    get:
-      tags:
-        - Siemens_S7_32
-      summary: >-
-        Retrieve configured Siemens Siemens S7-32 connection identified by
-        <conn_name>.
-      parameters:
-        - name: conn_name
-          in: path
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: edgeConnector_ID
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/siemensS732ConnWithoutConnStatus'
-        '403':
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '404':
-          description: Not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '406':
-          description: Not Acceptable. Default user password was not changed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates:
     post:
       tags:
-        - Siemens_S7_32
-      summary: Updates an existing Siemens Siemens S7-32 connection
-      description: >-
-        Updates an existing Siemens Siemens S7-32 connection with the new
-        information. If changes are detected and if enabled it applies it
-        immediately after a succeess confirmation.
+        - Temporary_PKI_Management
+      description: Creates a temporary PKI for manipulating certificates.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpointName:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pkiSessionId:
+                    type: string
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
       parameters:
-        - name: conn_name
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}:
+    delete:
+      tags:
+        - Temporary_PKI_Management
+      description: Removes temporary PKI.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/default-settings/{session-GUID}/own-certificate:
+    get:
+      tags:
+        - Temporary_PKI_Management
+      description: Get the default parameters for the Client App certificate.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  country:
+                    type: string
+                  state-or-province:
+                    type: string
+                  organization:
+                    type: string
+                  organization-unit:
+                    type: string
+                  common-name:
+                    type: string
+                  email:
+                    type: string
+                  locality:
+                    type: string
+                  valid-days:
+                    type: integer
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own:
+    get:
+      tags:
+        - Temporary_PKI_Management
+      description: Get the server own application certificate summary.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  validTo:
+                    type: string
+                  thumbprint:
+                    type: string
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+    put:
+      tags:
+        - Temporary_PKI_Management
+      description: Import the server own application certificate.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/*:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own/details/{thumbprint}:
+    get:
+      tags:
+        - Temporary_PKI_Management
+      description: Get own certificate details.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: thumbprint
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientCertificateDetails'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own/cert:
+    get:
+      tags:
+        - Temporary_PKI_Management
+      description: Get the server own application certificate.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/*:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own/password:
+    post:
+      tags:
+        - Temporary_PKI_Management
+      description: Set the own certificate password.
+      parameters:
+        - name: session-GUID
           in: path
           required: true
           schema:
@@ -8737,7 +8918,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/siemensS732Conn'
+              type: object
+              properties:
+                password:
+                  type: string
+        required: true
       responses:
         '200':
           description: OK success.
@@ -8745,20 +8930,360 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
-        '400':
-          description: Bad Request.
+        '404':
+          description: Not Found.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
-        '403':
-          description: Forbidden.
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own/generate-parametrized:
+    post:
+      tags:
+        - Temporary_PKI_Management
+      description: Set a new servers own certificate.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country:
+                  type: string
+                state-or-province:
+                  type: string
+                organization:
+                  type: string
+                organization-unit:
+                  type: string
+                common-name:
+                  type: string
+                email:
+                  type: string
+                locality:
+                  type: string
+                valid-days:
+                  type: integer
+        required: true
+      responses:
+        '200':
+          description: OK success.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
         '404':
-          description: Not found.
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own/generate:
+    post:
+      tags:
+        - Temporary_PKI_Management
+      description: Generates a new connection own certificate.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own/reusable-certs:
+    get:
+      tags:
+        - Temporary_PKI_Management
+      description: >-
+        Retrieve a list with the available certificates from the other
+        endpoints.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    endpointName:
+                      type: string
+                    name:
+                      type: string
+                    validTo:
+                      type: string
+                    thumbprint:
+                      type: string
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/own/copy-from-endpoint:
+    post:
+      tags:
+        - Temporary_PKI_Management
+      description: >-
+        Copies the own certificate from an existing endpoint as the own
+        certificate.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceEndpointName:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/trusted:
+    get:
+      tags:
+        - Temporary_PKI_Management
+      description: Get the list of trusted application certificates summaries.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                    validTo:
+                      type: string
+                    thumbprint:
+                      type: string
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+    put:
+      tags:
+        - Temporary_PKI_Management
+      description: Import a trusted app certificate.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/*:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/trusted/{thumbprint}:
+    get:
+      tags:
+        - Temporary_PKI_Management
+      description: Get the given trusted certificate details.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: thumbprint
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientCertificateDetails'
+        '404':
+          description: Not Found.
           content:
             application/json:
               schema:
@@ -8777,10 +9302,15 @@ paths:
                 $ref: '#/components/schemas/ResponseOthers'
     delete:
       tags:
-        - Siemens_S7_32
-      summary: Deletes the Siemens S7-32 connection identified by name <conn_name> .
+        - Temporary_PKI_Management
+      description: Delete the certificate.
       parameters:
-        - name: conn_name
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: thumbprint
           in: path
           required: true
           schema:
@@ -8793,18 +9323,12 @@ paths:
       responses:
         '200':
           description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '403':
-          description: Forbidden.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
         '404':
-          description: Not found.
+          description: Not Found.
           content:
             application/json:
               schema:
@@ -8821,15 +9345,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
-  /connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection/{conn_name}/symbolfile:
-    put:
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/rejected:
+    get:
       tags:
-        - Siemens_S7_32
-      summary: >-
-        Upload an SDFI symbol file for the connection identified by name
-        <conn_name>.
+        - Temporary_PKI_Management
+      description: Get the given trusted certificate details.
       parameters:
-        - name: conn_name
+        - name: session-GUID
           in: path
           required: true
           schema:
@@ -8845,166 +9367,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '406':
-          description: Not Acceptable. Default user password was not changed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-  /connectors/{edgeConnector_ID}/runtime/siemenss32/s32connection/advanced/defaults:
-    get:
-      tags:
-        - Siemens_S7_32
-      summary: Retrieves default advanced settings values.
-      responses:
-        '200':
-          description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/siemensS732ConnWithoutConnStatus'
-        '403':
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '406':
-          description: Not Acceptable. Default user password was not changed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-      parameters:
-        - in: path
-          name: edgeConnector_ID
-          required: true
-          schema:
-            type: string
-  /connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection:
-    get:
-      tags:
-        - Siemens_S7_72
-      summary: Retrieve all configured Siemens S7-72 connections.
-      responses:
-        '200':
-          description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/siemensS772Conns'
-        '403':
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '406':
-          description: Not Acceptable. Default user password was not changed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-      parameters:
-        - in: path
-          name: edgeConnector_ID
-          required: true
-          schema:
-            type: string
-    put:
-      tags:
-        - Siemens_S7_72
-      summary: Creates a new Siemens S7-72 connection
-      description: >-
-        Creates a new Siemens S7-72 connection and applies it immediately after
-        a success confirmation. Each newly created connection to a data source
-        has to be added into an existing address space.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/siemensS772Conn'
-      responses:
-        '200':
-          description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '400':
-          description: Bad Request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '403':
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '406':
-          description: Not Acceptable. Default user password was not changed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
-      parameters:
-        - in: path
-          name: edgeConnector_ID
-          required: true
-          schema:
-            type: string
-  /connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection/{conn_name}:
-    get:
-      tags:
-        - Siemens_S7_72
-      summary: Retrieve the Siemens S7-72 connection identified by name <conn_name> .
-      parameters:
-        - name: conn_name
-          in: path
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: edgeConnector_ID
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/siemensS772ConnWithoutConnStatus'
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                    validTo:
+                      type: string
+                    thumbprint:
+                      type: string
         '404':
-          description: Not found.
+          description: Not Found.
           content:
             application/json:
               schema:
@@ -9021,14 +9394,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
-    post:
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/rejected/{thumbprint}:
+    get:
       tags:
-        - Siemens_S7_72
-      summary: >-
-        Updates an existing Siemens S7-72 connection with the new information
-        and applies it immediately after a success confirmation.
+        - Temporary_PKI_Management
+      description: Get the given trusted certificate details.
       parameters:
-        - name: conn_name
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: thumbprint
           in: path
           required: true
           schema:
@@ -9038,26 +9415,15 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/siemensS772Conn'
       responses:
         '200':
           description: OK success.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseOthers'
-        '403':
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOthers'
+                $ref: '#/components/schemas/opcuaclientCertificateDetails'
         '404':
-          description: Not found.
+          description: Not Found.
           content:
             application/json:
               schema:
@@ -9076,10 +9442,15 @@ paths:
                 $ref: '#/components/schemas/ResponseOthers'
     delete:
       tags:
-        - Siemens_S7_72
-      summary: Deletes the Siemens S7-72 connection identified by name <conn_name> .
+        - Temporary_PKI_Management
+      description: Delete the certificate.
       parameters:
-        - name: conn_name
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: thumbprint
           in: path
           required: true
           schema:
@@ -9097,7 +9468,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
         '404':
-          description: Not found.
+          description: Not Found.
           content:
             application/json:
               schema:
@@ -9114,20 +9485,641 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOthers'
-  /connectors/{edgeConnector_ID}/runtime/siemenss72/s72connection/advanced/defaults:
-    get:
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/edit-certificates/{session-GUID}/rejected/{thumbprint}/move-to-trusted:
+    post:
       tags:
-        - Siemens_S7_72
-      summary: Retrieves default advanced settings values.
+        - Temporary_PKI_Management
+      description: Moves a certificate from rejected to trusted.
+      parameters:
+        - name: session-GUID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: thumbprint
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: OK success.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/siemensS772ConnWithoutConnStatus'
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
         '406':
           description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/enabled:
+    get:
+      tags:
+        - Enabled_State
+      description: Get the enabled state of the server.
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientEnabledState'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+      parameters:
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+    post:
+      tags:
+        - Enabled_State
+      description: Change the enabled state of the server.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/opcuaclientEnabledState'
+        required: true
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+      parameters:
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/test-connection:
+    post:
+      tags:
+        - Testing_Connection
+      description: >-
+        Initiate the test on the connection availability for a list of provided
+        OPC-UA endpoints.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/opcuaclientPostTestConnection'
+        required: true
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+      parameters:
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/test-connection/{connection-name}:
+    get:
+      tags:
+        - Testing_Connection
+      description: >-
+        Retrieve the connection availability for a specific connection
+        identified by it's name.
+      parameters:
+        - name: connection-name
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientTestSpecificConnection'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/connections:
+    get:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientConnections'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+      parameters:
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+    post:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/opcuaclientConnection'
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+      parameters:
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/connections/{connection-name}:
+    get:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      parameters:
+        - name: connection-name
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientConnection'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+    put:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      parameters:
+        - name: connection-name
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/opcuaclientConnection'
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+    delete:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      parameters:
+        - name: connection-name
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/connections/{connection-name}/performance-settings:
+    get:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      parameters:
+        - name: connection-name
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientPerformanceSettings'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/default-settings/performance-profiles:
+    get:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientPerformanceProfiles'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+      parameters:
+        - in: path
+          name: edgeConnector_ID
+          required: true
+          schema:
+            type: string
+  /connectors/{edgeConnector_ID}/runtime/opcua-client/default-settings/connection-advanced-settings:
+    get:
+      tags:
+        - Connections
+      description: Get the configured connections.
+      responses:
+        '200':
+          description: OK success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opcuaclientConnectionAdvancedSettings'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '406':
+          description: Not Acceptable. Default user password was not changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOthers'
+        '503':
+          description: Service Unavailable.
           content:
             application/json:
               schema:
@@ -12486,196 +13478,433 @@ components:
               type: string
             certificate:
               type: string
-    siemensS772ConnWithoutConnStatus:
+    opcuaclientPostTestConnection:
       type: object
       required:
-        - Address
-        - ConfigurationCheckPeriod
-        - ConnectionTimeout
+        - Access
+        - name
+        - URL
         - Enabled
-        - FolderLongNames
-        - MaxExecutingServices
-        - Name
-        - Port
-        - ReconnectRetryCounter
-        - ReconnectRetryPeriod
-        - RequestTimeout
-        - ServiceTimeout
+        - trusted-certificates-only
+        - security-mode
+        - security-policy
+        - authentication
+        - user-id
+        - AdvancedSettings
+        - pkiSessionId
       properties:
-        Address:
+        Access:
+          type: array
+          items:
+            type: string
+        name:
           type: string
-        ConfigurationCheckPeriod:
-          type: integer
-        ConnectionTimeout:
-          type: integer
+        URL:
+          type: string
         Enabled:
           type: boolean
-        FolderLongNames:
+        trusted-certificates-only:
           type: boolean
-        MaxExecutingServices:
-          type: integer
-        Name:
+        security-mode:
           type: string
-        Port:
-          type: integer
-        ReconnectRetryCounter:
-          type: integer
-        ReconnectRetryPeriod:
-          type: integer
-        RequestTimeout:
-          type: integer
-        ServiceTimeout:
-          type: integer
-    siemensS772Conn:
+        security-policy:
+          type: string
+        authentication:
+          type: string
+        user-id:
+          type: string
+        AdvancedSettings:
+          type: object
+          required:
+            - allowEmptyNonce
+            - alternateDiscoveryUrl
+            - connectionMonitoringInterval
+            - dataAccessServicesTimeout
+            - networkTimeout
+            - normaliseServerTimestamp
+            - normaliseSourceTimestamp
+            - publishServiceTimeout
+            - sessionRetryTimer
+            - sessionServiceTimeout
+            - sessionSetupTimeout
+            - sessionTimeout
+            - subAndMIServiceTimeout
+            - subKeepAliveCounter
+            - subLifetimeCounter
+            - subMaxNotificationsPerPublish
+            - useAlternateDiscoveryUrl
+            - viewServicesTimeout
+          properties:
+            allowEmptyNonce:
+              type: boolean
+            alternateDiscoveryUrl:
+              type: string
+            connectionMonitoringInterval:
+              type: integer
+            dataAccessServicesTimeout:
+              type: integer
+            networkTimeout:
+              type: integer
+            normaliseServerTimestamp:
+              type: boolean
+            normaliseSourceTimestamp:
+              type: boolean
+            publishServiceTimeout:
+              type: integer
+            sessionRetryTimer:
+              type: integer
+            sessionServiceTimeout:
+              type: integer
+            sessionSetupTimeout:
+              type: integer
+            sessionTimeout:
+              type: integer
+            subAndMIServiceTimeout:
+              type: integer
+            subKeepAliveCounter:
+              type: integer
+            subLifetimeCounter:
+              type: integer
+            subMaxNotificationsPerPublish:
+              type: integer
+            useAlternateDiscoveryUrl:
+              type: boolean
+            viewServicesTimeout:
+              type: integer
+        pkiSessionId:
+          type: string
+    opcuaclientNameModel:
       type: object
       required:
-        - Address
-        - ConfigurationCheckPeriod
-        - ConnectionStatus
-        - ConnectionTimeout
-        - Enabled
-        - FolderLongNames
-        - MaxExecutingServices
-        - Name
-        - Port
-        - ReconnectRetryCounter
-        - ReconnectRetryPeriod
-        - RequestTimeout
-        - ServiceTimeout
+        - name
       properties:
-        Address:
+        name:
           type: string
-        ConfigurationCheckPeriod:
-          type: integer
-        ConnectionStatus:
+    opcuaclientCertificateDetails:
+      type: object
+      required:
+        - serialNumber
+        - validFrom
+        - validTo
+        - thumbprint
+        - subject
+        - issuer
+        - subjectAlternativeName
+        - keyUsages
+      properties:
+        serialNumber:
+          type: string
+        validFrom:
+          type: string
+        validTo:
+          type: string
+        thumbprint:
+          type: string
+        subject:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/opcuaclientNameModel'
+        issuer:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/opcuaclientNameModel'
+        subjectAlternativeName:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/opcuaclientNameModel'
+        keyUsages:
+          type: array
+          items:
+            type: string
+    opcuaclientEnabledState:
+      type: object
+      required:
+        - enabled
+      properties:
+        enabled:
           type: boolean
-        ConnectionTimeout:
-          type: integer
+    opcuaclientConnection:
+      type: object
+      required:
+        - URL
+        - authentication
+        - name
+        - Enabled
+        - security-mode
+        - security-policy
+        - trusted-certificates-only
+        - Access
+        - AdvancedSettings
+      properties:
+        URL:
+          type: string
+        authentication:
+          type: string
+        name:
+          type: string
         Enabled:
           type: boolean
-        FolderLongNames:
-          type: boolean
-        MaxExecutingServices:
-          type: integer
-        Name:
+        security-mode:
           type: string
-        Port:
-          type: integer
-        ReconnectRetryCounter:
-          type: integer
-        ReconnectRetryPeriod:
-          type: integer
-        RequestTimeout:
-          type: integer
-        ServiceTimeout:
-          type: integer
-        Simulation:
+        security-policy:
+          type: string
+        trusted-certificates-only:
           type: boolean
-    siemensS772Conns:
+        Access:
+          type: array
+          items:
+            type: string
+        AdvancedSettings:
+          type: object
+          required:
+            - allowEmptyNonce
+            - alternateDiscoveryUrl
+            - connectionMonitoringInterval
+            - dataAccessServicesTimeout
+            - networkTimeout
+            - normaliseServerTimestamp
+            - normaliseSourceTimestamp
+            - publishServiceTimeout
+            - sessionRetryTimer
+            - sessionServiceTimeout
+            - sessionSetupTimeout
+            - sessionTimeout
+            - subAndMIServiceTimeout
+            - subKeepAliveCounter
+            - subLifetimeCounter
+            - subMaxNotificationsPerPublish
+            - useAlternateDiscoveryUrl
+            - viewServicesTimeout
+          properties:
+            allowEmptyNonce:
+              type: boolean
+            alternateDiscoveryUrl:
+              type: string
+            connectionMonitoringInterval:
+              type: integer
+            dataAccessServicesTimeout:
+              type: integer
+            networkTimeout:
+              type: integer
+            normaliseServerTimestamp:
+              type: boolean
+            normaliseSourceTimestamp:
+              type: boolean
+            publishServiceTimeout:
+              type: integer
+            sessionRetryTimer:
+              type: integer
+            sessionServiceTimeout:
+              type: integer
+            sessionSetupTimeout:
+              type: integer
+            sessionTimeout:
+              type: integer
+            subAndMIServiceTimeout:
+              type: integer
+            subKeepAliveCounter:
+              type: integer
+            subLifetimeCounter:
+              type: integer
+            subMaxNotificationsPerPublish:
+              type: integer
+            useAlternateDiscoveryUrl:
+              type: boolean
+            viewServicesTimeout:
+              type: integer
+    opcuaclientConnections:
       type: array
       items:
         allOf:
-          - $ref: '#/components/schemas/siemensS772Conn'
-    siemensS732ConnWithoutConnStatus:
+          - $ref: '#/components/schemas/opcuaclientConnection'
+    opcuaclientPerformanceSettings:
       type: object
       required:
-        - Name
-        - Address
-        - Enabled
-        - ExpandArrays
-        - Port
-        - ConnectionTimeout
-        - ReconnectRetryCounter
-        - ReconnectRetryPeriod
-        - RequestTimeout
-        - MaxExecutingServices
-        - ServiceTimeout
-        - TSAPPLC
-        - AMQPLC
-        - SDFIFileName
+        - maxBrowseNextRequestsPerTransaction
+        - maxBrowseReferenceDescriptions
+        - maxBrowseRequestsPerTransaction
+        - maxQueuedBrowseNextTransactions
+        - maxQueuedBrowseTransactions
+        - maxQueuedReadTransactions
+        - maxReadRequestsPerTransaction
+        - profileType
       properties:
-        Name:
-          type: string
-        Address:
-          type: string
-        Enabled:
-          type: boolean
-        ExpandArrays:
-          type: boolean
-        Port:
+        maxBrowseNextRequestsPerTransaction:
           type: integer
-        ConnectionTimeout:
+        maxBrowseReferenceDescriptions:
           type: integer
-        ReconnectRetryCounter:
+        maxBrowseRequestsPerTransaction:
           type: integer
-        ReconnectRetryPeriod:
+        maxQueuedBrowseNextTransactions:
           type: integer
-        RequestTimeout:
+        maxQueuedBrowseTransactions:
           type: integer
-        MaxExecutingServices:
+        maxQueuedReadTransactions:
           type: integer
-        ServiceTimeout:
+        maxReadRequestsPerTransaction:
           type: integer
-        TSAPPLC:
-          type: string
-        AMQPLC:
+        profileType:
           type: integer
-        SDFIFileName:
-          type: string
-    siemensS732Conn:
-      type: object
-      required:
-        - Name
-        - Address
-        - Enabled
-        - ExpandArrays
-        - Port
-        - ConnectionTimeout
-        - ReconnectRetryCounter
-        - ReconnectRetryPeriod
-        - RequestTimeout
-        - MaxExecutingServices
-        - ServiceTimeout
-        - TSAPPLC
-        - AMQPLC
-        - SDFIFileName
-        - ConnectionStatus
-      properties:
-        Name:
-          type: string
-        Address:
-          type: string
-        Enabled:
-          type: boolean
-        ExpandArrays:
-          type: boolean
-        Port:
-          type: integer
-        ConnectionTimeout:
-          type: integer
-        ReconnectRetryCounter:
-          type: integer
-        ReconnectRetryPeriod:
-          type: integer
-        RequestTimeout:
-          type: integer
-        MaxExecutingServices:
-          type: integer
-        ServiceTimeout:
-          type: integer
-        TSAPPLC:
-          type: string
-        AMQPLC:
-          type: integer
-        SDFIFileName:
-          type: string
-        ConnectionStatus:
-          type: boolean
-    siemensS732Conns:
+    opcuaclientPerformanceProfiles:
       type: array
       items:
-        allOf:
-          - $ref: '#/components/schemas/siemensS732Conn'
+        required:
+          - Label
+          - maxBrowseNextRequestsPerTransaction
+          - maxBrowseReferenceDescriptions
+          - maxBrowseRequestsPerTransaction
+          - maxQueuedBrowseNextTransactions
+          - maxQueuedBrowseTransactions
+          - maxQueuedReadTransactions
+          - maxReadRequestsPerTransaction
+          - profileType
+        properties:
+          Label:
+            type: string
+          maxBrowseNextRequestsPerTransaction:
+            type: integer
+          maxBrowseReferenceDescriptions:
+            type: integer
+          maxBrowseRequestsPerTransaction:
+            type: integer
+          maxQueuedBrowseNextTransactions:
+            type: integer
+          maxQueuedBrowseTransactions:
+            type: integer
+          maxQueuedReadTransactions:
+            type: integer
+          maxReadRequestsPerTransaction:
+            type: integer
+          profileType:
+            type: integer
+    opcuaclientTestSpecificConnection:
+      type: object
+      required:
+        - buildDate
+        - connectionSuccess
+        - currentTime
+        - localeIds
+        - manufacturerName
+        - maxBrowseCP
+        - maxMonitoredItems
+        - maxNodesBrowse
+        - maxNodesMethod
+        - maxNodesRead
+        - maxNodesTranslate
+        - maxNodesWrite
+        - minSamplingRate
+        - productName
+        - productUri
+        - serverState
+        - sessionId
+        - sessionName
+        - softwareVersion
+        - startTime
+        - statusCode
+      properties:
+        buildDate:
+          type: string
+        connectionSuccess:
+          type: boolean
+        currentTime:
+          type: string
+        localeIds:
+          type: string
+        manufacturerName:
+          type: string
+        maxBrowseCP:
+          type: string
+        maxMonitoredItems:
+          type: string
+        maxNodesBrowse:
+          type: string
+        maxNodesMethod:
+          type: string
+        maxNodesRead:
+          type: string
+        maxNodesTranslate:
+          type: string
+        maxNodesWrite:
+          type: string
+        minSamplingRate:
+          type: string
+        productName:
+          type: string
+        productUri:
+          type: string
+        serverState:
+          type: string
+        sessionId:
+          type: string
+        sessionName:
+          type: string
+        softwareVersion:
+          type: string
+        startTime:
+          type: string
+        statusCode:
+          type: string
+    opcuaclientConnectionAdvancedSettings:
+      type: object
+      required:
+        - allowEmptyNonce
+        - alternateDiscoveryUrl
+        - connectionMonitoringInterval
+        - dataAccessServicesTimeout
+        - networkTimeout
+        - normaliseServerTimestamp
+        - normaliseSourceTimestamp
+        - publishServiceTimeout
+        - sessionRetryTimer
+        - sessionServiceTimeout
+        - sessionSetupTimeout
+        - sessionTimeout
+        - subAndMIServiceTimeout
+        - subKeepAliveCounter
+        - subLifetimeCounter
+        - subMaxNotificationsPerPublish
+        - useAlternateDiscoveryUrl
+        - viewServicesTimeout
+      properties:
+        allowEmptyNonce:
+          type: boolean
+        alternateDiscoveryUrl:
+          type: string
+        connectionMonitoringInterval:
+          type: integer
+        dataAccessServicesTimeout:
+          type: integer
+        networkTimeout:
+          type: integer
+        normaliseServerTimestamp:
+          type: boolean
+        normaliseSourceTimestamp:
+          type: boolean
+        publishServiceTimeout:
+          type: integer
+        sessionRetryTimer:
+          type: integer
+        sessionServiceTimeout:
+          type: integer
+        sessionSetupTimeout:
+          type: integer
+        sessionTimeout:
+          type: integer
+        subAndMIServiceTimeout:
+          type: integer
+        subKeepAliveCounter:
+          type: integer
+        subLifetimeCounter:
+          type: integer
+        subMaxNotificationsPerPublish:
+          type: integer
+        useAlternateDiscoveryUrl:
+          type: boolean
+        viewServicesTimeout:
+          type: integer
     RequestRemote:
       type: object
       properties:
@@ -12918,6 +14147,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-externalDocs:
-  description: Quick start guide is provided at
-  url: https://github.com/SoftingIndustrial/datafeed-edge-connector
