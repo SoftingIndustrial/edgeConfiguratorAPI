@@ -1,6 +1,6 @@
 # edge-configurator-manual
 
-NOTE: This documentation is deprecated.
+NOTE: This documentation is deprecated. The up to date version is [here](https://github.com/SoftingIndustrial/SDEXapi).
 
 # Swagger API Documentation
 
